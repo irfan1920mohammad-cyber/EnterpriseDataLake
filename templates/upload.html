@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Dataset{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>📂 Universal Secure File Upload</h2>
+
+        <a href="/dashboard/" class="btn btn-primary">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+    <div class="card shadow p-4 mb-4">
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success">
+                Upload File
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- SEARCH BOX -->
+
+    <form method="GET" class="mb-4">
+
+        <div class="input-group">
+
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="🔍 Search File..."
+                value="{{ request.GET.search }}"
+            >
+
+            <button class="btn btn-primary">
+                Search
+            </button>
+
+        </div>
+
+    </form>
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <h4 class="mb-0">
+                📁 Uploaded Files
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-striped table-hover table-bordered">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>File Name</th>
+                        <th>Type</th>
+                        <th>Size</th>
+                        <th>Status</th>
+                        <th>Total Columns</th>
+                        <th>Valid</th>
+                        <th>Invalid</th>
+                        <th>Uploaded</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for data in datasets %}
+
+                    <tr>
+
+                        <td>{{ data.id }}</td>
+
+                        <td>{{ data.file.name }}</td>
+
+                        <td>{{ data.file_type }}</td>
+
+                        <td>{{ data.file_size|filesizeformat }}</td>
+
+                        <td>
+
+                            {% if data.status == "Validated" %}
+
+                                <span class="badge bg-success">
+                                    {{ data.status }}
+                                </span>
+
+                            {% elif data.status == "Invalid" %}
+
+                                <span class="badge bg-danger">
+                                    {{ data.status }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+                                    {{ data.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>{{ data.total_columns }}</td>
+
+                        <td>{{ data.valid_columns }}</td>
+
+                        <td>{{ data.invalid_columns }}</td>
+
+                        <td>{{ data.uploaded_at }}</td>
+
+                       <td>
+
+    <a href="/details/{{ data.id }}/"
+       class="btn btn-info btn-sm">
+        View
+    </a>
+
+    <a href="/download/{{ data.id }}/"
+       class="btn btn-primary btn-sm">
+        Download
+    </a>
+
+    <a href="/delete/{{ data.id }}/"
+       class="btn btn-danger btn-sm"
+       onclick="return confirm('Delete this file?')">
+        Delete
+    </a>
+
+</td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="10" class="text-center">
+
+                            No files uploaded yet.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3>
+            👋 Welcome, {{ request.user.username }}
+        </h3>
+
+        <a href="/upload/" class="btn btn-success">
+            📂 Upload Dataset
+        </a>
+
+    </div>
+
+    <div class="row">
+
+        <!-- Total Files -->
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-lg border-0 text-center p-4">
+
+                <h1 class="text-primary">
+                    {{ total_files }}
+                </h1>
+
+                <h5>Total Files</h5>
+
+            </div>
+
+        </div>
+
+        <!-- Valid Files -->
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-lg border-0 text-center p-4">
+
+                <h1 class="text-success">
+                    {{ valid_files }}
+                </h1>
+
+                <h5>Validated Files</h5>
+
+            </div>
+
+        </div>
+
+        <!-- Invalid Files -->
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-lg border-0 text-center p-4">
+
+                <h1 class="text-danger">
+                    {{ invalid_files }}
+                </h1>
+
+                <h5>Invalid Files</h5>
+
+            </div>
+
+        </div>
+
+        <!-- Metadata -->
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-lg border-0 text-center p-4">
+
+                <h1 class="text-warning">
+                    {{ metadata }}%
+                </h1>
+
+                <h5>Metadata Protection</h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow mt-4">
+
+        <div class="card-header bg-dark text-white">
+
+            <h4 class="mb-0">
+                📊 Project Status
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <p>
+                Total Uploaded Files :
+                <strong>{{ total_files }}</strong>
+            </p>
+
+            <p>
+                Successfully Validated :
+                <strong>{{ valid_files }}</strong>
+            </p>
+
+            <p>
+                Invalid Files :
+                <strong>{{ invalid_files }}</strong>
+            </p>
+
+            <p>
+                Metadata Protection :
+                <strong>{{ metadata }}%</strong>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="card shadow mt-5">
+
+    <div class="card-header bg-primary text-white">
+
+        <h4 class="mb-0">
+            📁 Recent Uploaded Files
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>File</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Uploaded</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for file in recent_files %}
+
+                <tr>
+
+                    <td>{{ file.id }}</td>
+                    <td>{{ file.file.name }}</td>
+                    <td>{{ file.file_type }}</td>
+                    <td>{{ file.status }}</td>
+                    <td>{{ file.uploaded_at }}</td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="5" class="text-center">
+                        No files uploaded yet.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
